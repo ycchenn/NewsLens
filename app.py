@@ -210,7 +210,7 @@ body, .gradio-container {
 }
 
 #hero { border-bottom: 1px solid var(--border); padding: 2rem 0 1.5rem; margin-bottom: 1.5rem; }
-#hero h1 { font-family: 'IBM Plex Mono', monospace !important; font-size: 1.5rem !important; font-weight: 600 !important; letter-spacing: -0.02em; color: var(--text) !important; margin: 0 0 0.35rem !important; }
+#hero h1 { font-family: 'IBM Plex Mono', monospace !important; font-size: 1.5rem !important; font-weight: 600 !important; letter-spacing: -0.02em; color: #38bdf8 !important; margin: 0 0 0.35rem !important; }
 #hero p { color: var(--muted) !important; font-size: 0.82rem !important; margin: 0 !important; }
 .badge { display: inline-block; background: rgba(56,189,248,.12); color: var(--accent); border: 1px solid rgba(56,189,248,.25); border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; padding: 2px 8px; margin-right: 6px; vertical-align: middle; }
 .panel { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: var(--radius) !important; padding: 1.25rem !important; }
@@ -223,10 +223,13 @@ label span { font-size: 0.75rem !important; font-weight: 600 !important; letter-
 #run-btn:hover { opacity: .88 !important; transform: translateY(-1px) !important; }
 #run-btn:active { transform: translateY(0) !important; }
 
-#meta-card { background: rgba(56,189,248,.06) !important; border: 1px solid rgba(56,189,248,.18) !important; border-left: 3px solid var(--accent) !important; border-radius: 6px !important; padding: 0.85rem 1rem !important; font-size: 0.82rem !important; color: #94a3b8 !important; margin-top: 0.75rem !important; min-height: 60px !important; }
+#meta-card { background: rgba(56,189,248,.06) !important; border: 1px solid rgba(56,189,248,.18) !important; border-left: 3px solid var(--accent) !important; border-radius: 6px !important; padding: 0.85rem 1rem !important; font-size: 0.82rem !important; color: #64748b !important; margin-top: 0.75rem !important; min-height: 60px !important; }
+#meta-card p { color: #64748b !important; }
+#meta-card * { color: #64748b !important; }
 .tab-nav button { font-family: 'IBM Plex Mono', monospace !important; font-size: 0.78rem !important; font-weight: 600 !important; letter-spacing: .04em !important; color: var(--muted) !important; border-bottom: 2px solid transparent !important; padding: 0.55rem 1rem !important; background: transparent !important; border-radius: 0 !important; transition: color .15s !important; }
 .tab-nav button.selected { color: var(--accent) !important; border-bottom-color: var(--accent) !important; }
-.output-box { background: var(--surface2) !important; border: 1px solid var(--border) !important; border-radius: var(--radius) !important; padding: 1.25rem 1.5rem !important; font-size: 0.875rem !important; line-height: 1.7 !important; min-height: 240px !important; color: #cbd5e1 !important;}
+.output-box { background: var(--surface2) !important; border: 1px solid var(--border) !important; border-radius: var(--radius) !important; padding: 1.25rem 1.5rem !important; font-size: 0.875rem !important; line-height: 1.7 !important; min-height: 240px !important; color: #64748b !important; }
+.output-box, .output-box p, .output-box li, .output-box span, .output-box strong, .output-box em, .output-box a, .output-box code { color: #64748b !important; }
 .legend { display: flex; gap: 1.5rem; padding: 0.75rem 0 0; border-top: 1px solid var(--border); margin-top: 1rem; }
 .legend-item { font-size: 0.72rem; color: var(--muted); display: flex; align-items: center; gap: 6px; }
 .dot { width: 8px; height: 8px; border-radius: 50%; }
@@ -250,7 +253,7 @@ with gr.Blocks(theme=THEME, css=CSS, title="NewsLens") as demo:
           <span class="badge">TAICHI 2026</span>
           <span class="badge">研究原型 v0.1</span>
         </div>
-        <h1 class="hero-title" style="margin-top:0.6rem; color: #363c7a;">NewsLens — 跨模態輿情閱讀與查核工具</h1>
+        <h1 class="hero-title" style="margin-top:0.6rem; color: #38bdf8;">NewsLens — 跨模態輿情閱讀與查核工具</h1>
         <p>輸入關鍵字與 YouTube 網址，系統自動爬取主流新聞、轉錄影片逐字稿，並以 A/B 雙模式呈現 LLM 分析報告。</p>
         """)
 
