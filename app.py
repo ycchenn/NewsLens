@@ -9,17 +9,11 @@ from groq import Groq
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
-# =========================================================================
-# 🔐 安全防護：優先讀取環境變數 (拒絕密碼暴露到 GitHub)
-# =========================================================================
 load_dotenv()
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 MONGO_URI    = os.environ.get("MONGO_URI")
 
-# =========================================================================
-# 🔍 模組一：新聞爬蟲深入提取內文 (對齊作業三進化)
-# =========================================================================
 def fetch_news_article(url, source):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
     try:
@@ -59,7 +53,6 @@ def run_integrated_crawler(keyword):
     except Exception as e:
         print(f"[警告] 聯合報抓取異常: {e}")
 
-    # 同步寫入 MongoDB 存檔驗證 (沿用 NoSQL 架構)
     try:
         if MONGO_URI:
             client     = MongoClient(MONGO_URI, tlsAllowInvalidCertificates=True)
@@ -72,9 +65,6 @@ def run_integrated_crawler(keyword):
 
     return filtered_news
 
-# =========================================================================
-# 🎬 模組二：多模態影音轉譯與核心 Agent (對齊作業六進化)
-# =========================================================================
 class CrossModalHCIAgent:
     def __init__(self, api_key):
         self.groq_client = Groq(api_key=api_key)
@@ -89,13 +79,12 @@ class CrossModalHCIAgent:
             result = self.groq_client.audio.transcriptions.create(
                 file=(audio_path, f.read()),
                 model="whisper-large-v3",
-                response_format="verbose_json",            # 拿取最完整的 JSON 元件
-                timestamp_granularities=["segment"]       # 強制要求輸出 segment 陣列
+                response_format="verbose_json",
+                timestamp_granularities=["segment"]
             )
         
         transcript_text = ""
         for seg in result.segments:
-            # 🎯 終極防禦性安全相容：不管 SDK 吐出的是 dict 還是 object，通通都能完美解析不崩潰！
             if isinstance(seg, dict):
                 start_val = seg.get("start", 0)
                 text_val  = seg.get("text", "").strip()
@@ -112,7 +101,7 @@ class CrossModalHCIAgent:
         base_prompt = f"""
         你是一個頂級的跨模態媒體輿情分析 AI。
         請比對以下由【爬蟲抓取的主流文字新聞】與【YouTube影片逐字稿內容】，找出兩者觀點的衝突點、互補點。
-        此外，請針對影片內容進行潛在的資安漏洞、隱私洩漏或社會工程學風險分析，並給予一句话觀看警示。
+        此外，請針對影片內容進行潛在的資安漏洞、隱私洩漏或社會工程學風險分析，並給予一句話觀看警示。
         
         【主流文字新聞背景知識】：
         {news_context}
@@ -141,9 +130,6 @@ class CrossModalHCIAgent:
         )
         return response.choices[0].message.content
 
-# =========================================================================
-# ⚙️ 前端與後端連動中樞 (核心 Pipeline 齒輪對齊)
-# =========================================================================
 def pipeline(keyword, youtube_url, progress=gr.Progress()):
     if not keyword or not youtube_url:
         return "關鍵字與 YouTube 網址皆不能為空", "", ""
@@ -182,30 +168,25 @@ def pipeline(keyword, youtube_url, progress=gr.Progress()):
         progress(0.55, desc="Whisper 語音轉文字中…")
         agent = CrossModalHCIAgent(GROQ_API_KEY)
         
-        # 🟢 完美修正點 1：使用你改寫好的精準時間軸解析函數
         vtt_string = agent.transcribe_with_timestamps(audio_path)
 
         progress(0.75, desc="LLM 生成 A/B 分析報告…")
         
-        # 🟢 完美修正點 2 & 3：將函數對齊為你的大腦生成器 generate_experiment_stimuli
         result_A = agent.generate_experiment_stimuli(vtt_string, news_context, mode="A")
         result_B = agent.generate_experiment_stimuli(vtt_string, news_context, mode="B")
 
         meta = (
-            f"🎬 **{title}** ·  {uploader}  ·  {mins}分{secs}秒\n\n"
-            f"📥 新聞爬蟲命中 **{len(news_list)}** 筆，已同步 MongoDB 資料庫。"
+            f" **{title}** ·  {uploader}  ·  {mins}分{secs}秒\n\n"
+            f" 新聞爬蟲命中 **{len(news_list)}** 筆，已同步 MongoDB 資料庫。"
         )
         return meta, result_A, result_B
 
     except Exception as e:
-        return f"❌ 系統錯誤：{str(e)}", "", ""
+        return f" 系統錯誤：{str(e)}", "", ""
     finally:
         if os.path.exists(audio_path):
             os.remove(audio_path)
 
-# =========================================================================
-# 🎨 UI 視覺美化設定 (沿用你設計的超漂亮 CSS，過濾 Gradio 陽春表單感)
-# =========================================================================
 CSS = """
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap');
 
@@ -242,10 +223,10 @@ label span { font-size: 0.75rem !important; font-weight: 600 !important; letter-
 #run-btn:hover { opacity: .88 !important; transform: translateY(-1px) !important; }
 #run-btn:active { transform: translateY(0) !important; }
 
-#meta-card { background: rgba(56,189,248,.06) !important; border: 1px solid rgba(56,189,248,.18) !important; border-left: 3px solid var(--accent) !important; border-radius: 6px !important; padding: 0.85rem 1rem !important; font-size: 0.82rem !important; margin-top: 0.75rem !important; min-height: 60px !important; }
+#meta-card { background: rgba(56,189,248,.06) !important; border: 1px solid rgba(56,189,248,.18) !important; border-left: 3px solid var(--accent) !important; border-radius: 6px !important; padding: 0.85rem 1rem !important; font-size: 0.82rem !important; color: #94a3b8 !important; margin-top: 0.75rem !important; min-height: 60px !important; }
 .tab-nav button { font-family: 'IBM Plex Mono', monospace !important; font-size: 0.78rem !important; font-weight: 600 !important; letter-spacing: .04em !important; color: var(--muted) !important; border-bottom: 2px solid transparent !important; padding: 0.55rem 1rem !important; background: transparent !important; border-radius: 0 !important; transition: color .15s !important; }
 .tab-nav button.selected { color: var(--accent) !important; border-bottom-color: var(--accent) !important; }
-.output-box { background: var(--surface2) !important; border: 1px solid var(--border) !important; border-radius: var(--radius) !important; padding: 1.25rem 1.5rem !important; font-size: 0.875rem !important; line-height: 1.7 !important; min-height: 240px !important; }
+.output-box { background: var(--surface2) !important; border: 1px solid var(--border) !important; border-radius: var(--radius) !important; padding: 1.25rem 1.5rem !important; font-size: 0.875rem !important; line-height: 1.7 !important; min-height: 240px !important; color: #cbd5e1 !important;}
 .legend { display: flex; gap: 1.5rem; padding: 0.75rem 0 0; border-top: 1px solid var(--border); margin-top: 1rem; }
 .legend-item { font-size: 0.72rem; color: var(--muted); display: flex; align-items: center; gap: 6px; }
 .dot { width: 8px; height: 8px; border-radius: 50%; }
@@ -269,7 +250,7 @@ with gr.Blocks(theme=THEME, css=CSS, title="NewsLens") as demo:
           <span class="badge">TAICHI 2026</span>
           <span class="badge">研究原型 v0.1</span>
         </div>
-        <h1 style="margin-top:0.6rem">NewsLens — 跨模態輿情閱讀與查核工具</h1>
+        <h1 class="hero-title" style="margin-top:0.6rem; color: #363c7a;">NewsLens — 跨模態輿情閱讀與查核工具</h1>
         <p>輸入關鍵字與 YouTube 網址，系統自動爬取主流新聞、轉錄影片逐字稿，並以 A/B 雙模式呈現 LLM 分析報告。</p>
         """)
 
@@ -298,5 +279,4 @@ with gr.Blocks(theme=THEME, css=CSS, title="NewsLens") as demo:
     btn.click(fn=pipeline, inputs=[input_keyword, input_url], outputs=[output_meta, output_A, output_B])
 
 if __name__ == "__main__":
-    # 確保本機執行時 share=True，一鍵生出公開連結以便爸媽實測
     demo.launch(share=True)
