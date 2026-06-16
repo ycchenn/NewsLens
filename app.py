@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import gradio as gr
 import os
 import re
@@ -178,24 +181,24 @@ custom_theme = gr.themes.Soft(primary_hue="sky", secondary_hue="slate", neutral_
     body_background_fill="*neutral_950", block_background_fill="*neutral_900", block_border_color="*neutral_800"
 )
 
-with gr.Blocks(theme=custom_theme, css=custom_css, title="TAICHI 2026 跨模態輿情閱讀器") as demo:
-    gr.Markdown("# 🏆 TAICHI 2026 實驗系統原型：跨模態輿情閱讀與查核工具\n**研究主題**：媒體資訊超載時代，LLM 輔助的新聞影片閱讀工具對使用者資訊消費行為的影響")
+with gr.Blocks(theme=custom_theme, css=custom_css, title="NewsLens：跨模態輿情閱讀與查核工具") as demo:
+    gr.Markdown("# NewsLens：跨模態輿情閱讀與查核工具\n**研究主題**：媒體資訊超載時代，LLM 輔助的新聞影片閱讀工具對使用者資訊消費行為的影響")
     
     with gr.Row():
         with gr.Column(scale=1, elem_classes="experimental-card"):
-            gr.Markdown("### 🛠️ 1. 實驗參數輸入")
+            gr.Markdown("### 1. 實驗參數輸入")
             input_keyword = gr.Textbox(label="輿情定錨關鍵字", placeholder="例如: iPhone災情、輝達...", value="科技")
             input_url = gr.Textbox(label="要查核的 YouTube 影片網址", placeholder="https://www.youtube.com/watch?v=...")
-            btn_submit = gr.Button("🚀 啟動雙軌跨模態分析", elem_classes="action-btn")
+            btn_submit = gr.Button("啟動雙軌跨模態分析", elem_classes="action-btn")
             gr.Markdown("---")
-            output_meta = gr.Markdown("### 📊 系統狀態\n等待受測者輸入...")
+            output_meta = gr.Markdown("### 系統狀態\n等待受測者輸入...")
 
         with gr.Column(scale=2, elem_classes="experimental-card"):
-            gr.Markdown("### 🧪 2. 雙軌呈現粒度對照介面 (Dual-view Interface)")
+            gr.Markdown("### 2. 雙軌呈現粒度對照介面 (Dual-view Interface)")
             with gr.Tabs():
-                with gr.TabItem("⚙️ A組介面（純極簡摘要 - 黑盒子模式）"):
+                with gr.TabItem("A組介面（純極簡摘要 - 黑盒子模式）"):
                     output_A = gr.Markdown("*(等待系統生成)*\n\n此模式僅提供高度精簡大綱，隱藏所有時間軸，模擬低認知負荷。")
-                with gr.TabItem("🔍 B組介面（時間軸逐字稿 - 可解釋性模式）"):
+                with gr.TabItem("B組介面（時間軸逐字稿 - 可解釋性模式）"):
                     output_B = gr.Markdown("*(等待系統生成)*\n\n此模式提供精準時間戳記與 VTT 逐字稿，供使用者進行跨模態真偽查核。")
 
     btn_submit.click(fn=taichi_experiment_pipeline, inputs=[input_keyword, input_url], outputs=[output_meta, output_A, output_B])
