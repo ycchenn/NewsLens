@@ -1,0 +1,4 @@
+__pycache__/
+.env
+*.m4a
+downloaded_audio.*
