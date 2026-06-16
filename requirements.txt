@@ -4,3 +4,4 @@ yt-dlp
 pymongo
 beautifulsoup4
 requests
+python-dotenv
